@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:pages="clr-namespace:MenuLogDemo.Pages"
+            xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+            android:TabbedPage.ToolbarPlacement="Bottom"
+             x:Class="MenuLogDemo.Pages.DashboardPage">
+    <TabbedPage.Children>
+        <NavigationPage Title="Starter">
+            <x:Arguments>
+                <pages:StarterPage/>
+            </x:Arguments>
+        </NavigationPage>
+        <NavigationPage Title="Pizzas">
+            <x:Arguments>
+                <pages:PizzaPage/>
+            </x:Arguments>
+        </NavigationPage>
+        <NavigationPage Title="Main Course">
+            <x:Arguments>
+                <pages:MaincoursePage/>
+            </x:Arguments>
+        </NavigationPage>
+        <NavigationPage Title="Check Out">
+            <x:Arguments>
+                <pages:CartPage/>
+            </x:Arguments>
+        </NavigationPage>
+    </TabbedPage.Children>
+</TabbedPage>

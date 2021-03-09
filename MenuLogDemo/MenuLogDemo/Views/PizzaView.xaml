@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MenuLogDemo.Views.PizzaView">
+    <ContentPage.Content>
+        <StackLayout>
+            <Image Source="{Binding TappedIconPizza}"/>
+            <Label Text="{Binding TappedPizzaName}"/>
+            <Label Text="{Binding TappedPizzaPrice, StringFormat= '{}{0:C}'}" IsVisible="false"/>
+            <Label Text="Please choose your bread." />
+            <Picker ItemDisplayBinding="{Binding PizzaDoughName}" x:Name="PizzaDoughEntry" Title="Select Dough" ItemsSource="{Binding PizzaDoughTypes}"/>
+            <Label Text="Please choose your sauce"/>
+            <Picker ItemDisplayBinding="{Binding PizzaSauceName}" x:Name="PizzaSauceEntry" Title="Select Sauce" ItemsSource="{Binding PizzaSauceTypes}"/>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Quantity"/>
+                
+            </StackLayout>
+            <Button Text="Add To Cart" Clicked="AddToCart"/>
+        </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MenuLogDemo.Pages.PizzaPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Please Select your pizza." />
+            <ListView ItemsSource="{Binding PizzaDetails}" HasUnevenRows="True" BackgroundColor="White" ItemTapped="OnTappedPizza">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="4" Margin="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Frame IsClippedToBounds="True" Grid.Row="0" HasShadow="True" Padding="0"
+                                       BackgroundColor="WhiteSmoke">
+                                    <StackLayout>
+                                        <Image Source="{Binding PizzaIcon}"/>
+                                        <Label Text="{Binding Name}" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding Price, StringFormat= '{}{0:C}'}" HorizontalOptions="Center"/>
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
