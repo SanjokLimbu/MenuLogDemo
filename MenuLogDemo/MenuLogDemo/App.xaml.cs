@@ -10,8 +10,7 @@ namespace MenuLogDemo
         public App()
         {
             InitializeComponent();
-
-            MainPage = new DashboardPage();
+            MainPage = new NavigationPage(new MainPage()); //new MainPage();
         }
 
         protected override void OnStart()

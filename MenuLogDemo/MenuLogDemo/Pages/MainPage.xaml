@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:MenuLogDemo.Pages"
+             Title="MenuLogDemo"
+            xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+            android:TabbedPage.ToolbarPlacement="Bottom"
+             x:Class="MenuLogDemo.MainPage">
+
+    <NavigationPage.TitleView>
+        <Frame Padding="0" BackgroundColor="Transparent">
+            <Grid Padding="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="NewPacificOrder" WidthRequest="50" HeightRequest="50" Margin="0" Grid.Column="0" HorizontalOptions="Start"/>
+                <Label Text="MenuLogDemo" Grid.Column="1" VerticalOptions="Center" Margin="0"/>
+                <ImageButton Source="AddToBasket" BackgroundColor="Transparent" Clicked="OnClickPushToCartPage"
+                    WidthRequest="50" HeightRequest="50" Grid.Column="2" CornerRadius="50" Margin="0" HorizontalOptions="End"/>  
+            </Grid>
+        </Frame>
+    </NavigationPage.TitleView>
+    <TabbedPage.Children>
+        <NavigationPage Title="Starter">
+            <x:Arguments>
+                <pages:StarterPage />
+            </x:Arguments>
+        </NavigationPage>
+        <NavigationPage Title="Pizza">
+            <x:Arguments>
+                <pages:PizzaPage />
+            </x:Arguments>
+        </NavigationPage>
+        <NavigationPage Title="Main">
+            <x:Arguments>
+                <pages:MaincoursePage />
+            </x:Arguments>
+        </NavigationPage>
+    </TabbedPage.Children>
+</TabbedPage>

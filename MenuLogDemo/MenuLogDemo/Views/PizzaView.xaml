@@ -11,10 +11,8 @@
             <Picker ItemDisplayBinding="{Binding PizzaDoughName}" x:Name="PizzaDoughEntry" Title="Select Dough" ItemsSource="{Binding PizzaDoughTypes}"/>
             <Label Text="Please choose your sauce"/>
             <Picker ItemDisplayBinding="{Binding PizzaSauceName}" x:Name="PizzaSauceEntry" Title="Select Sauce" ItemsSource="{Binding PizzaSauceTypes}"/>
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Quantity"/>
-                
-            </StackLayout>
+            <Label Text="Quantity"/>
+            <Entry Text="{Binding Quantity}" Keyboard="Numeric"/>
             <Button Text="Add To Cart" Clicked="AddToCart"/>
         </StackLayout>
   </ContentPage.Content>
