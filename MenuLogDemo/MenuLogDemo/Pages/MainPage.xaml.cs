@@ -1,10 +1,6 @@
-﻿using MenuLogDemo.Pages;
+﻿using MenuLogDemo.Helpers;
+using MenuLogDemo.Pages;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MenuLogDemo
@@ -13,7 +9,10 @@ namespace MenuLogDemo
     {
         public MainPage()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+            //Create cart table
+            var createTable = new CreateCartTable();
+            createTable.CreateTable();
         }
         private void OnClickPushToCartPage(object sender, EventArgs e)
         {

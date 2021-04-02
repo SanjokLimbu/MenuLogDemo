@@ -7,6 +7,7 @@ namespace MenuLogDemo.CartModel
     {
         [AutoIncrement, PrimaryKey]
         public int CartItemId { get; set; }
+        public int ItemId { get; set; }
         public string ItemName { get; set; }
         public int ItemQuantity { get; set; }
         public float ItemPrice { get; set; }

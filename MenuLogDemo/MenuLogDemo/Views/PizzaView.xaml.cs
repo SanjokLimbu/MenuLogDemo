@@ -18,6 +18,7 @@ namespace MenuLogDemo.Views
     {
         public IList<PizzaDough> PizzaDoughTypes { get; set; }
         public IList<PizzaSauce> PizzaSauceTypes { get; set; }
+        public int TappedPizzaId { get; set; }
         public string TappedIconPizza { get; set; }
         public string TappedPizzaName { get; set; }
         public float TappedPizzaPrice { get; set; }
@@ -54,6 +55,7 @@ namespace MenuLogDemo.Views
                 new PizzaSauce { Id = 1, PizzaSauceName = "MenuLogDemoSauce" },
                 new PizzaSauce { Id = 1, PizzaSauceName = "Barbecue" }
             };
+            TappedPizzaId = tappedItem.PizzaId;
             TappedIconPizza = tappedItem.PizzaIcon;
             TappedPizzaName = tappedItem.Name;
             TappedPizzaPrice = tappedItem.Price;
@@ -71,19 +73,22 @@ namespace MenuLogDemo.Views
             {
                 ItemCartModel ItemInCart = new ItemCartModel()
                 {
+                    CartItemId = TappedPizzaId,
                     ItemName = TappedPizzaName,
                     ItemDough = selectedDoughItem.PizzaDoughName.ToString(),
                     ItemSauce = selectedSauceItem.PizzaSauceName.ToString(),
                     ItemQuantity = Quantity,
                     ItemPrice = TappedPizzaPrice
                 };
-                //Create cart table
-                var createTable = new CreateCartTable();
-                createTable.CreateTable();
                 //Find item in that table created above
-                var item = connection.Table<ItemCartModel>().ToList().FirstOrDefault();
+                var item = connection.Table<ItemCartModel>().ToList().FirstOrDefault(cartItems => cartItems.ItemId == TappedPizzaId);
                 if (item == null)
                     connection.Insert(ItemInCart);
+                else
+                {
+                    item.ItemQuantity += Quantity;
+                    connection.Update(item);
+                }
                 connection.Commit();
                 connection.Close();
                 DisplayAlert("Cart", "Item added to cart.", "Ok");

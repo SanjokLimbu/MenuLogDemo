@@ -16,9 +16,9 @@ namespace MenuLogDemo.Pages
             InitializeComponent();
             PizzaDetails = new List<PizzaModel>
             {
-                new PizzaModel{PizzaIcon="PizzaPeporini.png", Name="Peporini Pizza", Price = 5.0f},
-                new PizzaModel{PizzaIcon="PizzaChicken.png", Name="Chicken Pizza", Price = 6.0f},
-                new PizzaModel{PizzaIcon="PizzaPrawn.jpg", Name="Prawn Pizza", Price = 8.0f}
+                new PizzaModel{PizzaId = 1, PizzaIcon="PizzaPeporini.png", Name="Peporini Pizza", Price = 5.0f},
+                new PizzaModel{PizzaId = 2, PizzaIcon="PizzaChicken.png", Name="Chicken Pizza", Price = 6.0f},
+                new PizzaModel{PizzaId = 3, PizzaIcon="PizzaPrawn.jpg", Name="Prawn Pizza", Price = 8.0f}
             };
             BindingContext = this;
         }
