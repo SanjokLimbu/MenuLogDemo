@@ -1,12 +1,14 @@
-﻿using Android.App;
-using MenuLogDemo.CartModel;
+﻿using MenuLogDemo.CartModel;
 using MenuLogDemo.Interface;
 using MenuLogDemo.Models.ViewModel;
+using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -19,7 +21,7 @@ namespace MenuLogDemo.Pages
     {
         public ObservableCollection<Cart> CartItem { get; set; }
         public string NameText { get; set; }
-        public int PhoneText { get; set; }
+        public string PhoneText { get; set; }
         public Command PlaceOrderCommand { get; set; }
         private float _totalCost;
         public float TotalCost
@@ -55,12 +57,53 @@ namespace MenuLogDemo.Pages
                 var from = new EmailAddress("annoyingthreat@gmail.com", "MenuLogDemo");
                 var subject = "New Order";
                 var to = new EmailAddress("sanlimbz@yahoo.com.au");
-                var content = CartItem.ToString();
-                var name = NameText;
-                var message = MailHelper.CreateSingleEmail(from, to, subject, content, name);
+                var content = SendOrderEmailBody();
+                var message = MailHelper.CreateSingleEmail(from, to, subject, content, "");
                 await Task.Run(() => client.SendEmailAsync(message).ConfigureAwait(false));
             }
-            await Xamarin.Forms.Application.Current.MainPage.Navigation.PushModalAsync(new MainPage());
+            await Application.Current.MainPage.Navigation.PushModalAsync(new MainPage());
+            var connection = DependencyService.Get<ISQLite>().GetConnection();
+            connection.DeleteAll<ItemCartModel>();
+            connection.Commit();
+            connection.Close();
+        }
+        public string SendOrderEmailBody()
+        {
+            var connection = DependencyService.Get<ISQLite>().GetConnection();
+            var orderData = connection.Table<ItemCartModel>().ToList();
+            float totalCost = 0f;
+            List<PlaceOrderModel> orderModel = new List<PlaceOrderModel>();
+            for (int i = 0; i < orderData.Count; i++)
+            {
+                totalCost += (orderData[i].ItemPrice * orderData[i].ItemQuantity);
+                orderModel.Add(new PlaceOrderModel()
+                {
+                    PlacedOrderItemname = orderData[i].ItemName,
+                    PlacedOrderQuantity = orderData[i].ItemQuantity,
+                    PlacedOrderItemDough = orderData[i].ItemDough,
+                    PlacedOrderItemSauce = orderData[i].ItemSauce,
+                });
+                //{
+                //    new PlaceOrderModel()
+                //    {
+                //        PlacedOrderItemname = orderData[i].ItemName,
+                //        PlacedOrderQuantity = orderData[i].ItemQuantity,
+                //        PlacedOrderItemDough = orderData[i].ItemDough,
+                //        PlacedOrderItemSauce = orderData[i].ItemSauce,
+                //        PlacedOrderItemPrice = orderData[i].ItemPrice
+                //    }
+                //};
+                TotalCost = totalCost;
+            }
+            Order OrderDetails = new Order
+            {
+                UserName = NameText,
+                UserPhone = PhoneText,
+                OrderItems = orderModel,
+                TotalCost = totalCost
+            };
+            var content = JsonConvert.SerializeObject(OrderDetails);
+            return content;
         }
         private void LoadItems()
         {
@@ -71,15 +114,13 @@ namespace MenuLogDemo.Pages
             {
                 CartItem.Add(new Cart()
                 {
-                    UserName = NameText,
-                    UserNumber = PhoneText,
                     UserItemname = item.ItemName,
                     UserItemQuantity = item.ItemQuantity,
-                    userItemPrice = item.ItemPrice,
+                    UserItemPrice = item.ItemPrice,
                     ItemDough = item.ItemDough,
                     ItemSauce = item.ItemSauce
                 });
-                TotalCost += (item.ItemPrice * item.ItemQuantity); 
+                TotalCost += (item.ItemPrice * item.ItemQuantity);
             }
         }
     }

@@ -43,7 +43,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Label Text="{Binding UserItemname}" Grid.Column="0" FontSize="Body"/>
                                     <Label Text="{Binding UserItemQuantity}" Grid.Column="1" FontSize="Body"/>
-                                    <Label Text="{Binding userItemPrice}" Grid.Column="2" FontSize="Body"/>
+                                    <Label Text="{Binding UserItemPrice}" Grid.Column="2" FontSize="Body"/>
                                     <Label Text="Action" Grid.Column="3" FontSize="Body"/>
                                 </Grid>
                             </ViewCell.View>
