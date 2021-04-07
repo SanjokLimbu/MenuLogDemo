@@ -52,7 +52,7 @@ namespace MenuLogDemo.Pages
             }
             else
             {
-                var apiKey = "*"; //Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
                 var client = new SendGridClient(apiKey);
                 var from = new EmailAddress("annoyingthreat@gmail.com", "MenuLogDemo");
                 var subject = "New Order";
@@ -80,19 +80,10 @@ namespace MenuLogDemo.Pages
                 {
                     PlacedOrderItemname = orderData[i].ItemName,
                     PlacedOrderQuantity = orderData[i].ItemQuantity,
+                    PlacedOrderItemPrice = orderData[i].ItemPrice,
                     PlacedOrderItemDough = orderData[i].ItemDough,
                     PlacedOrderItemSauce = orderData[i].ItemSauce,
                 });
-                //{
-                //    new PlaceOrderModel()
-                //    {
-                //        PlacedOrderItemname = orderData[i].ItemName,
-                //        PlacedOrderQuantity = orderData[i].ItemQuantity,
-                //        PlacedOrderItemDough = orderData[i].ItemDough,
-                //        PlacedOrderItemSauce = orderData[i].ItemSauce,
-                //        PlacedOrderItemPrice = orderData[i].ItemPrice
-                //    }
-                //};
                 TotalCost = totalCost;
             }
             Order OrderDetails = new Order
