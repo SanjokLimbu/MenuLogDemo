@@ -1,4 +1,5 @@
 ﻿using MenuLogDemo.CartModel;
+using MenuLogDemo.Helpers;
 using MenuLogDemo.Interface;
 using MenuLogDemo.Models.ViewModel;
 using Newtonsoft.Json;
@@ -7,7 +8,6 @@ using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -52,58 +52,56 @@ namespace MenuLogDemo.Pages
             }
             else
             {
-                var apiKey = "*"; //Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
                 var client = new SendGridClient(apiKey);
                 var from = new EmailAddress("annoyingthreat@gmail.com", "MenuLogDemo");
                 var subject = "New Order";
                 var to = new EmailAddress("sanlimbz@yahoo.com.au");
-                var content = SendOrderEmailBody();
-                var message = MailHelper.CreateSingleEmail(from, to, subject, content, "");
+                var htmlContent = SendHtmlContent();
+                var message = MailHelper.CreateSingleEmail(from, to, subject, "", htmlContent);
                 await Task.Run(() => client.SendEmailAsync(message).ConfigureAwait(false));
             }
+            await DisplayAlert("Order Sent", "Thank you for your patience.", "OK");
             await Application.Current.MainPage.Navigation.PushModalAsync(new MainPage());
             var connection = DependencyService.Get<ISQLite>().GetConnection();
             connection.DeleteAll<ItemCartModel>();
             connection.Commit();
             connection.Close();
         }
-        public string SendOrderEmailBody()
+        public string SendHtmlContent()
         {
             var connection = DependencyService.Get<ISQLite>().GetConnection();
             var orderData = connection.Table<ItemCartModel>().ToList();
             float totalCost = 0f;
-            List<PlaceOrderModel> orderModel = new List<PlaceOrderModel>();
             for (int i = 0; i < orderData.Count; i++)
             {
                 totalCost += (orderData[i].ItemPrice * orderData[i].ItemQuantity);
-                orderModel.Add(new PlaceOrderModel()
-                {
-                    PlacedOrderItemname = orderData[i].ItemName,
-                    PlacedOrderQuantity = orderData[i].ItemQuantity,
-                    PlacedOrderItemDough = orderData[i].ItemDough,
-                    PlacedOrderItemSauce = orderData[i].ItemSauce,
-                });
-                //{
-                //    new PlaceOrderModel()
-                //    {
-                //        PlacedOrderItemname = orderData[i].ItemName,
-                //        PlacedOrderQuantity = orderData[i].ItemQuantity,
-                //        PlacedOrderItemDough = orderData[i].ItemDough,
-                //        PlacedOrderItemSauce = orderData[i].ItemSauce,
-                //        PlacedOrderItemPrice = orderData[i].ItemPrice
-                //    }
-                //};
                 TotalCost = totalCost;
             }
-            Order OrderDetails = new Order
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendFormat("Name\t{0}\tPhone Number\t{1}\tTotal Cost\t{2}\n", NameText, PhoneText, TotalCost);
+            stringBuilder.AppendFormat("\t\t<th>\n");
+            stringBuilder.AppendFormat("\t\t\tName");
+            stringBuilder.AppendFormat("\t\t\tQuantity");
+            stringBuilder.AppendFormat("\t\t\tPrice");
+            stringBuilder.AppendFormat("\t\t\tDough");
+            stringBuilder.AppendFormat("\t\t\tSauce");
+            stringBuilder.AppendFormat("\t\t</th>\n");
+            using (HtmlContent.Table table = new HtmlContent.Table(stringBuilder))
             {
-                UserName = NameText,
-                UserPhone = PhoneText,
-                OrderItems = orderModel,
-                TotalCost = totalCost
-            };
-            var content = JsonConvert.SerializeObject(OrderDetails);
-            return content;
+                foreach(var items in orderData)
+                {
+                    using(HtmlContent.Row row = table.AddRow())
+                    {
+                        row.AddCell(items.ItemName);
+                        row.AddCell(items.ItemQuantity.ToString());
+                        row.AddCell(items.ItemPrice.ToString());
+                        row.AddCell(items.ItemDough);
+                        row.AddCell(items.ItemSauce);
+                    }
+                }
+            }
+            return stringBuilder.ToString();
         }
         private void LoadItems()
         {
