@@ -76,8 +76,8 @@ namespace MenuLogDemo.Pages
             for (int i = 0; i < orderData.Count; i++)
             {
                 totalCost += (orderData[i].ItemPrice * orderData[i].ItemQuantity);
-                //    new PlaceOrderModel()
-                //    {
+                TotalCost = totalCost;
+            }
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat("Name\t{0}\tPhone Number\t{1}\tTotal Cost\t{2}\n", NameText, PhoneText, TotalCost);
             stringBuilder.AppendFormat("\t\t<th>\n");
@@ -93,15 +93,6 @@ namespace MenuLogDemo.Pages
                 {
                     using(HtmlContent.Row row = table.AddRow())
                     {
-                        row.AddCell(items.ItemName);
-                        row.AddCell(items.ItemQuantity.ToString());
-                        row.AddCell(items.ItemPrice.ToString());
-                        row.AddCell(items.ItemDough);
-                        row.AddCell(items.ItemSauce);
-                    }
-                }
-            }
-            return stringBuilder.ToString();
                         row.AddCell(items.ItemName);
                         row.AddCell(items.ItemQuantity.ToString());
                         row.AddCell(items.ItemPrice.ToString());
