@@ -62,7 +62,7 @@ namespace MenuLogDemo.Pages
                 await Task.Run(() => client.SendEmailAsync(message).ConfigureAwait(false));
             }
             await DisplayAlert("Order Sent", "Thank you for your patience.", "OK");
-            await Application.Current.MainPage.Navigation.PushModalAsync(new MainPage());
+            await Navigation.PopModalAsync();
             var connection = DependencyService.Get<ISQLite>().GetConnection();
             connection.DeleteAll<ItemCartModel>();
             connection.Commit();
